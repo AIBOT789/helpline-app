@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Profile</title>
+    <style>
+        body { margin:0; font-family:sans-serif; background:#f6f7fa; }
+        .profile-bg {
+            width:100vw; height:220px; object-fit:cover; background:#eee; position:relative;
+        }
+        .profile-pic {
+            width:110px; height:110px; border-radius:50%; border:4px solid #fff; position:absolute; left:50%; top:160px; transform:translateX(-50%); object-fit:cover; background:#fff;
+        }
+        .profile-info {
+            margin-top:70px; text-align:center;
+        }
+        .desc { color:#444; margin:18px auto 0 auto; font-size:1.13em; max-width:500px; }
+        .profile-upload-form { margin:30px auto 0 auto; text-align:center; background:#fff; padding:24px 30px; border-radius:10px; box-shadow:0 2px 12px #0001; max-width:420px; }
+        .profile-upload-form label { display:block; margin:12px 0 4px 0; font-weight:bold; }
+        .profile-upload-form input[type="file"] { margin-bottom:10px; }
+        .profile-upload-form textarea { width:100%; min-height:60px; border-radius:6px; border:1px solid #ccc; padding:7px; margin-bottom:10px; }
+        .profile-upload-form button { background:#2980b9; color:white; border:none; border-radius:6px; padding:8px 20px; font-weight:bold; }
+    </style>
+</head>
+<body style="background:#181818; color:#fff; margin:0; font-family:sans-serif;">
+    <div style="position:relative;">
+        <img src="{{ url_for('static', filename='uploads/' + (user[2] if user[2] else 'default-bg.jpg')) }}" class="profile-bg" alt="Profile Background" style="width:100vw; height:250px; object-fit:cover; background:#333; border-radius:18px 18px 0 0;">
+        <img src="{{ url_for('static', filename='uploads/' + (user[1] if user[1] else 'default-profile.png')) }}" class="profile-pic" alt="Profile Picture" style="width:130px; height:130px; border-radius:50%; border:6px solid #181818; position:absolute; left:54px; top:170px; object-fit:cover; background:#222;">
+    </div>
+    <div class="profile-info" style="margin-top:70px; text-align:left; max-width:800px; margin-left:54px;">
+        <h1 style="font-size:2.2em; font-weight:bold; margin-bottom:6px;">{{ user[0] }}</h1>
+        <div style="color:#aaa; font-size:1.2em; margin-bottom:10px;">{{ user[4] if user[4] else '' }}</div>
+        <div class="desc" style="color:#e0e0e0; font-size:1.15em; margin-bottom:12px; max-width:600px;">{{ user[3] or "No description yet." }}</div>
+        {% if user[4] %}
+        <div style="margin-bottom:18px;"><a href="{{ user[4] }}" target="_blank" style="color:#4fc3f7; font-size:1.1em; text-decoration:underline;">{{ user[4] }}</a></div>
+        {% endif %}
+        <div style="margin-top:10px;">
+            <span style="background:#2196f3; color:#fff; border-radius:6px; padding:6px 16px; font-weight:bold; font-size:1.1em;">
+                {{ 'Helper' if user[6]=='helper' else 'Requester' }}
+            </span>
+        </div>
+    </div>
+
+    <div style="max-width:800px; margin:40px 0 0 54px;">
+        {% if not public_view %}
+        <h2 style="color:#fff; margin-bottom:18px;">Publish a New Help Request</h2>
+        <form action="/request_help" method="POST" style="background:#fff; border-radius:10px; box-shadow:0 2px 10px #0001; padding:28px 30px 22px 30px; margin-bottom:30px; color:#222;">
+            <label for="location">Your Location:</label><br>
+            <input type="text" id="location" name="location" style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc;">
+            <label for="category">Category:</label>
+            <select id="category" name="category" required style="margin-bottom:10px; padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
+                <option value="Physical">Physical</option>
+                <option value="Emotional">Emotional</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Food">Food</option>
+                <option value="Tools">Tools</option>
+                <option value="Talk">Talk</option>
+                <option value="Travel">Travel</option>
+                <option value="Tech">Tech</option>
+                <option value="Other">Other</option>
+            </select><br>
+            <label for="price">How much will you pay the helper?</label><br>
+            <input type="number" id="price" name="price" required min="1" step="0.01" placeholder="Enter amount (e.g. 19.99)" style="width:100%; padding:8px; margin-bottom:10px;"><br>
+            <label for="payment_method">Payment Method:</label>
+            <select id="payment_method" name="payment_method" required style="margin-bottom:10px; padding:6px 10px; border-radius:6px; border:1px solid #ccc;">
+                <option value="upi">UPI</option>
+                <option value="card">Card</option>
+                <option value="netbanking">Net Banking</option>
+            </select><br>
+            <div style="color:#c0392b; font-size:0.98em; margin-bottom:10px;">Payment is required before your request is published.</div>
+            <label for="service_type">Type of Service Needed:</label><br>
+            <input type="text" id="service_type" name="service_type" required placeholder="e.g. Grocery Pickup, Tech Support" style="width:100%; padding:8px; margin-bottom:10px;"><br>
+            <label for="description">Description of Help Needed:</label><br>
+            <textarea id="description" name="description" required style="width:100%; min-height:60px; border-radius:6px; border:1px solid #ccc; padding:7px; margin-bottom:10px;"></textarea><br>
+            <button type="submit" style="background:#27ae60; color:white; border:none; border-radius:6px; padding:10px 22px; font-weight:bold;">Submit Request</button>
+        </form>
+        {% endif %}
+        <h2 style="color:#fff; margin-bottom:18px;">Published Requests</h2>
+        {% if my_requests and my_requests|length > 0 %}
+            {% for req in my_requests %}
+            <div style="background:#232323; border-radius:10px; margin-bottom:18px; padding:20px 28px; color:#fff; box-shadow:0 2px 10px #0002;">
+                <div style="font-weight:bold; font-size:1.13em; margin-bottom:6px;">{{ req[0] }}</div>
+                <div style="margin-bottom:6px;">Category: <b>{{ req[2] }}</b> | Service: <b>{{ req[3] }}</b></div>
+                <div style="margin-bottom:6px;">Price: <b>₹{{ req[1] }}</b></div>
+                <div style="margin-bottom:6px;">Status: <b>{{ req[4] }}</b></div>
+                <div style="color:#bbb; font-size:0.98em;">Created: {{ req[5] }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="color:#bbb;">No requests published yet.</div>
+        {% endif %}
+    </div>
+</body>
+</html>

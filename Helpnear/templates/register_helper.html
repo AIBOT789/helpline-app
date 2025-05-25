@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as Helper</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Register as a Helper</h1>
+    <form action="/register_helper" method="POST" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px #ccc; max-width:400px;">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+        <label for="location">Your Location:</label><br>
+        <input type="text" id="location" name="location" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+        <label for="contact">Contact Info:</label><br>
+        <input type="text" id="contact" name="contact" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+        <button type="submit" style="padding:8px 16px; background:#27ae60; color:white; border:none; border-radius:5px;">Register</button>
+    </form>
+    <a href="/">Back to Home</a>
+</body>
+</html>

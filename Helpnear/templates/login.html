@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h2>Login</h2>
+    <form action="/login" method="POST" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px #ccc; max-width:400px;">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+        <button type="submit" style="padding:8px 16px; background:#3498db; color:white; border:none; border-radius:5px;">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/register">Register here</a></p>
+    <a href="/">Back to Home</a>
+</body>
+</html>
